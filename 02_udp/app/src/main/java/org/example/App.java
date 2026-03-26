@@ -14,8 +14,7 @@ public class App {
         connection.start();
 
         // Enviar mensaje 
-
-        connection.sendDatagramt("Hola desde acá", "127.0.0.1", 5000);
+        connection.sendDatagramt("Hola desde aca", "172.16.15.132", 5000);
 
     }
 }

@@ -35,7 +35,6 @@ public class UDPConnection extends Thread {
         // Recepción del mensaje
 
         try {
-            socket = new DatagramSocket(5000);
             byte[] buffer = new byte[1024]; 
 
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length); 

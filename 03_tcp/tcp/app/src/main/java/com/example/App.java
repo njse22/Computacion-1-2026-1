@@ -12,14 +12,14 @@ public class App {
         /////////////////
         //  Recepción  //
         /////////////////
-        connection.setServerPort(5000);
-        connection.start();
+        // connection.setServerPort(5000);
+        // connection.start();
 
 
         /////////////
         //  Envio  //
         /////////////
-        connection.sendMessage("192.168.X.X", 5050);
+        connection.sendMessage("192.168.131.179", 5000);
         
     }
 }

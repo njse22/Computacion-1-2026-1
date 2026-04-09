@@ -59,13 +59,22 @@ public class TCPConnection extends Thread {
 
         new Thread( () -> {
             try {
-                socket = new Socket(InetAddress.getByName(dstIp), dstPort);
-                OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream()); 
+                Socket remoteSocket = new Socket(InetAddress.getByName(dstIp), dstPort);
+                OutputStreamWriter osw = new OutputStreamWriter(remoteSocket.getOutputStream()); 
                 BufferedWriter writer = new BufferedWriter(osw); 
 
-                String msj = "new messge"; 
+                BufferedReader consoReader = new BufferedReader(new InputStreamReader(System.in));
 
-                writer.write(msj);
+                System.out.println("Type message: ");
+                String msj = ""; 
+
+                while ( (msj = consoReader.readLine()) != null) {
+                    System.out.println("send::while >> " + msj);
+                    writer.write(msj);
+                }
+                writer.flush();
+                writer.close();
+                remoteSocket.close();
                 
             } catch (Exception e) {
                 // TODO: handle exception

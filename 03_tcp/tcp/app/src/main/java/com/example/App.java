@@ -6,6 +6,20 @@ public class App {
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+        TCPConnection connection = TCPConnection.getInstance(); 
+
+        /////////////////
+        //  Recepción  //
+        /////////////////
+        connection.setServerPort(5000);
+        connection.start();
+
+
+        /////////////
+        //  Envio  //
+        /////////////
+        connection.sendMessage("192.168.X.X", 5050);
+        
     }
 }

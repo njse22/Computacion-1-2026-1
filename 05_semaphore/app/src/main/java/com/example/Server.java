@@ -9,9 +9,13 @@ import com.example.model.Warehouse;
 
 public class Server {
 
+    // ThreadPool, manejar multiples conexiones
     private ExecutorService pool; 
+    // Semaphore, bloquear recursos 
     private Semaphore semaphore; 
+    // Server socket para habilitar un puerto 
     private ServerSocket socket;
+    // Controlador de logica de negocio
     private Warehouse warehouse;
 
     public String getGreeting() {
@@ -19,13 +23,18 @@ public class Server {
     }
 
     public Server() {
+        // Inicializo el ThreadPool para habilitar 5 conexiones simultaneas
         this.pool = Executors.newFixedThreadPool(5); 
+
+        // Solo 3 clientes pueden hacer operaciones de forma 
+        // simultanea
         this.semaphore = new Semaphore(3); // Example limit for simultaneous processing
         this.warehouse = new Warehouse(); // Shared instance
     }
 
     public static void main(String[] args) {
         Server server = new Server(); 
+        // inicializar el puerto de escuccha del servidor
         server.setPort(5000);
 
         System.out.println("Server started on port 5000...");
@@ -33,7 +42,8 @@ public class Server {
         try {
             while (true) {
                 // Accepts connection and passes shared warehouse and semaphore
-                server.getPool().execute(
+                // gestionar las solicitudes del cliente en hilos distintos
+                server.getPool().execute( // runnable 
                         new ClientHandler(server.getSocket().accept(), 
                             server.getWarehouse(), server.getSemaphore()));
             }

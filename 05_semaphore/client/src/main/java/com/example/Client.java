@@ -12,28 +12,40 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        String host = "192.168.1.8"; // Default host
+        String host = "192.168.131.198"; // Default host
         int port = 5000;
-
-        if (args.length > 0) {
-            host = args[0];
-        }
 
         System.out.println("Connecting to " + host + ":" + port + "...");
         System.out.println("Type 'exit' or 'quit' to close the connection.\n");
 
         try (
+
+            // Socket del cliente -> conecta al servidor
             Socket socket = new Socket(host, port);
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+
+            // Escribe lo que el socket le recive desde el servidor
+            PrintWriter writer = 
+                new PrintWriter(socket.getOutputStream(), true);
+
+            // Leer lo que el cliente le manda al servidor 
+            BufferedReader readerSocket = 
+                new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
+            // lector de la consola
+            BufferedReader consoleReader = 
+                new BufferedReader(new InputStreamReader(System.in));
         ) {
 
             String command = "";
             System.out.println("Write command (read ID / update ID count): ");
+
+
             while ((command = consoleReader.readLine()) != null) {
                 
-                if (command == null || command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("quit")) {
+                if ( command.equalsIgnoreCase("exit") || 
+                     command.equalsIgnoreCase("quit")) {
+
                     System.out.println("Exit !!");
                     break;
                 }
@@ -44,8 +56,11 @@ public class Client {
                 }
 
                 System.out.println("command");
+                // El coamndo se escribe en el socket 
                 writer.println(command);
-                String response = reader.readLine();
+
+                // Lee la información que le entra socket
+                String response = readerSocket.readLine();
                 
                 if (response == null) {
                     System.out.println("Server disconnected.");

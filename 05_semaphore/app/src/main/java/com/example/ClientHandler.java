@@ -10,6 +10,7 @@ import java.util.concurrent.Semaphore;
 
 public class ClientHandler implements Runnable {
 
+    // La conexión con el cliente
     private Socket socket;
     private Warehouse warehouse; 
     private Semaphore semaphore;
@@ -23,15 +24,26 @@ public class ClientHandler implements Runnable {
     @Override
     public void run(){
         try (
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            // Lector de los comandos que entran por el socket 
+            BufferedReader reader = 
+                new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            // Escritor de los comandos que se envia al cliente desde el servidor
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
         ) {
             System.out.println("Client connected: " + socket.getInetAddress());
             
             String line;
+
             while ((line = reader.readLine()) != null) {
                 String[] command = line.split(" "); 
                 String response = "Invalid command";
+
+                // GET 
+                // read 1 -> command[2]
+
+                // POST 
+                // update 1 10 -> command[3]
 
                 if (command[0].equals("read")) {
                     if (command.length >= 2) {
@@ -40,10 +52,14 @@ public class ClientHandler implements Runnable {
                             System.out.println("Reading product ID: " + id);
                             
                             // Using semaphore to control access
+                            // Bloqueo el recurso 
                             semaphore.acquire();
                             try {
+                                // de la logivca de negocio hago la consulta 
+                                // necesaria 
                                 response = warehouse.getProductById(id);
                             } finally {
+                                // liberar el recurso
                                 semaphore.release();
                             }
                         } catch (NumberFormatException e) {
@@ -58,14 +74,20 @@ public class ClientHandler implements Runnable {
                         try {
                             int id = Integer.parseInt(command[1]); 
                             int count = Integer.parseInt(command[2]);
-                            System.out.println("Updating product ID: " + id + " to count: " + count);
+                            System.out.println(
+                                    "Updating product ID: " + id + 
+                                    " to count: " + count);
                             
                             // Using semaphore to control access
+                            // Bloqueo el recurso 
                             semaphore.acquire();
                             try {
+                                // se realiza la consulta 
                                 String result = warehouse.updateProduct(id, count);
-                                response = "Product update result for ID " + id + ": " + result;
+                                response = "Product update result for ID " 
+                                    + id + ": " + result;
                             } finally {
+                                // libero el recurso 
                                 semaphore.release();
                             }
                         } catch (NumberFormatException e) {

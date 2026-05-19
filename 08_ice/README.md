@@ -281,7 +281,7 @@ public class Server {
   }
 ```
 
-- server/src/main/resources/properties.cfg
+- client/src/main/resources/properties.cfg
 
 ```groovy
 Suscriber.Endpoints = default -p 6001 -h localhost

@@ -180,9 +180,9 @@ subprojects {
   rootProject.name = 'ProjectName'
   include 'client'
   include 'server'
-  ```
+ ```
 
-  ### Arquitectura con Ice:
+### Arquitectura con Ice:
 
   ![](./doc/Diagramas-Page-18.svg)
   App.ice
